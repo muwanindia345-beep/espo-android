@@ -3,7 +3,6 @@ package com.espo.roboto
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -39,7 +38,6 @@ data class Mesaĝo(val teksto: String, val estasUzanto: Boolean)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             EspoTheme {
                 Surface(color = FonaKoloro) {
@@ -125,13 +123,12 @@ fun EspoEkrano() {
         Row(
             modifier = Modifier
                 .fillMaxWidth(0.94f)
-                .height(IntrinsicSize.Min),
+                .height(56.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
                 value = tekstoKampo.value,
                 onValueChange = { tekstoKampo.value = it },
-                textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
