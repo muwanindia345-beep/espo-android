@@ -6,16 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -85,8 +81,6 @@ fun EspoEkrano() {
         modifier = Modifier
             .fillMaxSize()
             .background(FonaKoloro)
-            .systemBarsPadding()
-            .imePadding()
             .padding(top = 16.dp, bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -121,9 +115,7 @@ fun EspoEkrano() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(0.94f)
-                .height(56.dp),
+            modifier = Modifier.fillMaxWidth(0.94f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
@@ -131,26 +123,22 @@ fun EspoEkrano() {
                 onValueChange = { tekstoKampo.value = it },
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
-                placeholder = { Text("Skribu mesaĝon...", maxLines = 1) },
+                    .clip(RoundedCornerShape(topStart = 22.dp, bottomStart = 22.dp)),
+                placeholder = { Text("Skribu mesaĝon en Esperanto...") },
                 singleLine = true,
-                shape = RoundedCornerShape(topStart = 22.dp, bottomStart = 22.dp, topEnd = 0.dp, bottomEnd = 0.dp),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                keyboardActions = KeyboardActions(onSend = { sendi() }),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
                     focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White
+                    unfocusedTextColor = Color.Black
                 )
             )
             Button(
                 onClick = { sendi() },
-                shape = RoundedCornerShape(topStart = 0.dp, bottomStart = 0.dp, topEnd = 22.dp, bottomEnd = 22.dp),
+                shape = RoundedCornerShape(topEnd = 22.dp, bottomEnd = 22.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = UzantaVeziko),
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.height(56.dp)
             ) {
                 Text("Sendi", color = FonaKoloro, fontWeight = FontWeight.Bold)
             }
