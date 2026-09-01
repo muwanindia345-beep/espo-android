@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.Espo" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#1E1E2F</item>
+        <item name="android:statusBarColor">#1E1E2F</item>
+    </style>
+</resources>
