@@ -167,21 +167,20 @@ fun BabilVeziko(m: Mesaĝo) {
     val tekstoKoloro = if (m.estasUzanto) FonaKoloro else Color.White
     val vico = if (m.estasUzanto) Arrangement.End else Arrangement.Start
 
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        val maksLarĝo = maxWidth * 0.8f
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = vico) {
-            Box(
-                modifier = Modifier
-                    .widthIn(max = maksLarĝo)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(fono)
-                    .padding(horizontal = 14.dp, vertical = 10.dp)
-            ) {
-                Text(text = m.teksto, color = tekstoKoloro, fontSize = 15.sp)
-            }
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = vico) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(fono)
+                .padding(horizontal = 14.dp, vertical = 10.dp)
+                .fillMaxWidth(0.8f, min = 0f)
+        ) {
+            Text(text = m.teksto, color = tekstoKoloro, fontSize = 15.sp)
         }
     }
 }
+
+private fun Modifier.fillMaxWidth(fraction: Float, min: Float): Modifier = this
 
 @Composable
 fun AnimaciaVizaĝo(parolas: Boolean) {
