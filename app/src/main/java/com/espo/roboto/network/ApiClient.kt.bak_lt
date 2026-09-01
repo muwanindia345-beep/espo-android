@@ -45,24 +45,4 @@ object ApiClient {
             )
         }
     }
-
-    fun traduki(teksto: String): String {
-        val korpo = JSONObject().apply {
-            put("teksto", teksto)
-        }.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
-
-        val peto = Request.Builder()
-            .url("$BAZA_URL/traduki")
-            .post(korpo)
-            .build()
-
-        kliento.newCall(peto).execute().use { respondo ->
-            if (!respondo.isSuccessful) {
-                throw Exception("Servila eraro: ${respondo.code}")
-            }
-            val korpoTeksto = respondo.body?.string() ?: "{}"
-            val json = JSONObject(korpoTeksto)
-            return json.optString("traduko", "")
-        }
-    }
 }

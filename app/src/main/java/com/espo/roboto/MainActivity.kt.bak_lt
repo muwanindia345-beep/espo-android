@@ -28,24 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.clickable
-import androidx.compose.ui.platform.LocalUriHandler
-import coil.compose.AsyncImage
 import com.espo.roboto.network.ApiClient
 import com.espo.roboto.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Mesaĝo(
-    val teksto: String,
-    val estasUzanto: Boolean,
-    val ligilo: String? = null,
-    val bildo: String? = null
-) {
-    var traduko by mutableStateOf<String?>(null)
-    var tradukante by mutableStateOf(false)
-}
+data class Mesaĝo(val teksto: String, val estasUzanto: Boolean)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,14 +73,7 @@ fun EspoEkrano() {
                 val respondo = withContext(Dispatchers.IO) {
                     ApiClient.sendiMesaĝon(mesaĝo)
                 }
-                komenca.add(
-                    Mesaĝo(
-                        teksto = respondo.teksto,
-                        estasUzanto = false,
-                        ligilo = respondo.ligilo,
-                        bildo = respondo.bildo
-                    )
-                )
+                komenca.add(Mesaĝo(respondo.teksto, estasUzanto = false))
             } catch (e: Exception) {
                 komenca.add(Mesaĝo("⚠️ Ne eblis atingi la servilon: ${e.message}", estasUzanto = false))
             } finally {
@@ -184,100 +166,18 @@ fun BabilVeziko(m: Mesaĝo) {
     val fono = if (m.estasUzanto) UzantaVeziko else RobotaVeziko
     val tekstoKoloro = if (m.estasUzanto) FonaKoloro else Color.White
     val vico = if (m.estasUzanto) Arrangement.End else Arrangement.Start
-    val uriTraktilo = LocalUriHandler.current
-    val amplekso = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val maksLarĝo = maxWidth * 0.8f
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = vico) {
-                Box(
-                    modifier = Modifier
-                        .widthIn(max = maksLarĝo)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(fono)
-                        .padding(horizontal = 14.dp, vertical = 10.dp)
-                ) {
-                    Text(text = m.teksto, color = tekstoKoloro, fontSize = 15.sp)
-                }
-            }
-        }
-
-        if (!m.bildo.isNullOrBlank()) {
-            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                val maksLarĝo = maxWidth * 0.8f
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = vico) {
-                    AsyncImage(
-                        model = m.bildo,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .widthIn(max = maksLarĝo)
-                            .clip(RoundedCornerShape(10.dp))
-                    )
-                }
-            }
-        }
-
-        if (!m.ligilo.isNullOrBlank()) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = vico) {
-                Text(
-                    text = "🔗 Legu pli / Read more",
-                    color = UzantaVeziko,
-                    fontSize = 13.sp,
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .clickable { uriTraktilo.openUri(m.ligilo) }
-                )
-            }
-        }
-
-        if (!m.estasUzanto) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                if (m.traduko == null) {
-                    Text(
-                        text = if (m.tradukante) "⏳ ..." else "🌐 Traduki",
-                        color = UzantaVeziko,
-                        fontSize = 12.sp,
-                        modifier = Modifier
-                            .padding(top = 4.dp, start = 4.dp)
-                            .clickable(enabled = !m.tradukante) {
-                                m.tradukante = true
-                                amplekso.launch {
-                                    try {
-                                        val t = withContext(Dispatchers.IO) {
-                                            ApiClient.traduki(m.teksto)
-                                        }
-                                        m.traduko = t
-                                    } catch (e: Exception) {
-                                        m.traduko = "⚠️ Eraro"
-                                    } finally {
-                                        m.tradukante = false
-                                    }
-                                }
-                            }
-                    )
-                } else {
-                    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                        val maksLarĝo = maxWidth * 0.8f
-                        Box(
-                            modifier = Modifier
-                                .padding(top = 4.dp)
-                                .widthIn(max = maksLarĝo)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(TradukoVeziko)
-                                .padding(horizontal = 14.dp, vertical = 10.dp)
-                        ) {
-                            Text(
-                                text = m.traduko ?: "",
-                                color = Color.White,
-                                fontSize = 15.sp,
-                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-                            )
-                        }
-                    }
-                }
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val maksLarĝo = maxWidth * 0.8f
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = vico) {
+            Box(
+                modifier = Modifier
+                    .widthIn(max = maksLarĝo)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(fono)
+                    .padding(horizontal = 14.dp, vertical = 10.dp)
+            ) {
+                Text(text = m.teksto, color = tekstoKoloro, fontSize = 15.sp)
             }
         }
     }
