@@ -8,15 +8,6 @@ android {
     namespace = "com.espo.roboto"
     compileSdk = 35
 
-    signingConfigs {
-        getByName("debug") {
-            storeFile = file("espo-debug.keystore")
-            storePassword = "espo12345"
-            keyAlias = "espo"
-            keyPassword = "espo12345"
-        }
-    }
-
     defaultConfig {
         applicationId = "com.espo.roboto"
         minSdk = 24
